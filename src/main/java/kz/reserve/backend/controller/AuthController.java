@@ -89,4 +89,25 @@ public class AuthController {
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
+
+    @PostMapping("/add-super-admin")
+    public ResponseEntity<?> addSuperAdmin() {
+        if (userRepository.existsByEmail("admin@test.io")) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: You can't create"));
+        }
+
+        // Create new user's account
+        User user = new User("admin", "admin@test.io",
+                passwordEncoder.encode("1234"));
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(Role.superAdmin);
+
+        user.setRoles(roles);
+        userRepository.save(user);
+
+        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
 }
