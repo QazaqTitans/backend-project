@@ -19,21 +19,21 @@ import javax.validation.constraints.Min;
 public class RestaurantController {
     @Autowired
     private RestaurantService restaurantService;
-    @GetMapping()
-    public ResponseEntity<?> getRestaurants() {
-        return restaurantService.getRestaurants();
-    }
-
-    @PostMapping()
-    public ResponseEntity<?> addCategory(@Valid @RequestBody RestaurantRequest restaurantRequest) {
-        return restaurantService.addRestaurant(restaurantRequest);
-    }
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateRestaurant(@Valid @Min(1) @PathVariable Long id, @Valid @RequestBody RestaurantRequest restaurantRequest) {
-        return restaurantService.updateRestaurant(id, restaurantRequest);
-    }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteRestaurant(@Valid @Min(1) @PathVariable Long id) {
-        return restaurantService.deleteRestaurant(id);
-    }
+//    @GetMapping()
+//    public ResponseEntity<?> getRestaurants() {
+//        return restaurantService.getRestaurants();
+//    }
+//
+//    @PostMapping()
+//    public ResponseEntity<?> addCategory(@Valid @RequestBody RestaurantRequest restaurantRequest) {
+//        return restaurantService.addRestaurant(restaurantRequest);
+//    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<?> updateRestaurant(@Valid @Min(1) @PathVariable Long id, @Valid @RequestBody RestaurantRequest restaurantRequest) {
+//        return restaurantService.updateRestaurant(id, restaurantRequest);
+//    }
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<?> deleteRestaurant(@Valid @Min(1) @PathVariable Long id) {
+//        return restaurantService.deleteRestaurant(id);
+//    }
 }

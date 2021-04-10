@@ -7,9 +7,8 @@ import javax.validation.constraints.NotBlank;
 public class RestaurantRequest {
     @NotBlank
     private String name;
-    private int admin_id;
-    private Long map_coordination;
-
+    private Long adminId;
+    private String mapCoordination;
 
     public String getName() {
         return name;
@@ -19,19 +18,19 @@ public class RestaurantRequest {
         this.name = name;
     }
 
-    public int getAdmin_id() {
-        return admin_id;
+    public Long getAdminId() {
+        return adminId;
     }
 
-    public void setAdmin_id(int admin_id) {
-        this.admin_id = admin_id;
+    public void setAdminId(Long adminId) {
+        this.adminId = adminId;
     }
 
-    public Long getMap_coordination() {
-        return map_coordination;
+    public String getMapCoordination() {
+        return mapCoordination;
     }
 
-    public void setMap_coordination(Long map_coordination) {
-        this.map_coordination = map_coordination;
+    public void setMapCoordination(String mapCoordination) {
+        this.mapCoordination = mapCoordination;
     }
 }
