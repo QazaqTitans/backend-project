@@ -7,7 +7,7 @@ import java.util.List;
 public class RestaurantResponse {
     private List<Restaurant> restaurantList;
 
-    public RestaurantResponse(List<Restaurant> categoryList) {
+    public RestaurantResponse(List<Restaurant> restaurantList) {
         this.restaurantList = restaurantList;
     }
 

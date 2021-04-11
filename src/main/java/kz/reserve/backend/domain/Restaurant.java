@@ -10,9 +10,18 @@ public class Restaurant {
     private Long id;
 
     private String name;
-    private int admin_id;
-    private Long map_coordination;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    private User admin;
+
+    private String mapCoordination;
+
+    @Column(columnDefinition="TEXT")
+    private String description;
+
+    private String address;
+
+    public Restaurant() {}
 
     public String getName() {
         return name;
@@ -30,27 +39,35 @@ public class Restaurant {
         this.id = id;
     }
 
-    public int getAdmin_id() {
-        return admin_id;
+    public User getAdmin() {
+        return admin;
     }
 
-    public void setAdmin_id(int admin_id) {
-        this.admin_id = admin_id;
+    public void setAdmin(User admin) {
+        this.admin = admin;
     }
 
-    public Long getMap_coordination() {
-        return map_coordination;
+    public String getMapCoordination() {
+        return mapCoordination;
     }
 
-    public void setMap_coordination(Long map_coordination) {
-        this.map_coordination = map_coordination;
+    public void setMapCoordination(String mapCoordination) {
+        this.mapCoordination = mapCoordination;
     }
 
+    public String getDescription() {
+        return description;
+    }
 
-    public Restaurant(){}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
+    public String getAddress() {
+        return address;
+    }
 
-
-
-
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }
