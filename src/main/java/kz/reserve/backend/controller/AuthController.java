@@ -44,7 +44,7 @@ public class AuthController {
     @PostMapping("/sign-in")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -58,18 +58,11 @@ public class AuthController {
 
         return ResponseEntity.ok(new JwtResponse(
                 jwt,
-                userDetails.getUsername(),
                 userDetails.getEmail()));
     }
 
     @PostMapping("/sign-up")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
-        }
-
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
@@ -77,8 +70,7 @@ public class AuthController {
         }
 
         // Create new user's account
-        User user = new User(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
+        User user = new User(signUpRequest.getEmail(),
                 passwordEncoder.encode(signUpRequest.getPassword()));
 
         Set<Role> roles = new HashSet<>();
@@ -99,8 +91,7 @@ public class AuthController {
         }
 
         // Create new user's account
-        User user = new User("admin", "admin@test.io",
-                passwordEncoder.encode("1234"));
+        User user = new User("admin@test.io", passwordEncoder.encode("1234"));
 
         Set<Role> roles = new HashSet<>();
         roles.add(Role.superAdmin);
