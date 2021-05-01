@@ -1,10 +1,14 @@
 package kz.reserve.backend.service;
 
+import kz.reserve.backend.configuration.UserDetailsImpl;
 import kz.reserve.backend.domain.User;
+import kz.reserve.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
@@ -17,6 +21,9 @@ public class ServiceUtils {
 
     @Value("${spring.mail.username}")
     private String username;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public String generatePassword(int length) {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -41,5 +48,11 @@ public class ServiceUtils {
         mailMessage.setText(message);
 
         mailSender.send(mailMessage);
+    }
+
+    public User getPrincipal() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        return userRepository.getOne(userDetails.getId());
     }
 }

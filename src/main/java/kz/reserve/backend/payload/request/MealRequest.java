@@ -1,21 +1,29 @@
 package kz.reserve.backend.payload.request;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class MealRequest {
     @NotBlank
     private String name;
 
-    private String description;
     @NotBlank
+    private String description;
+
     private String features;
 
+    @NotNull
     private double price;
 
-    private boolean is_finished;
-    private Date start_time;
-    private Date end_time;
+    private boolean isFinished = false;
+
+    @NotNull
+    private Long time;
+
+    @NotNull
+    private Long categoryId;
 
     public String getName() {
         return name;
@@ -49,30 +57,27 @@ public class MealRequest {
         this.price = price;
     }
 
-    public boolean isIs_finished() {
-        return is_finished;
+    public boolean isFinished() {
+        return isFinished;
     }
 
-    public void setIs_finished(boolean is_finished) {
-        this.is_finished = is_finished;
+    public void setFinished(boolean finished) {
+        isFinished = finished;
     }
 
-    public Date getStart_time() {
-        return start_time;
+    public Long getTime() {
+        return time;
     }
 
-    public void setStart_time(Date start_time) {
-        this.start_time = start_time;
+    public void setTime(Long time) {
+        this.time = time;
     }
 
-    public Date getEnd_time() {
-        return end_time;
+    public Long getCategoryId() {
+        return categoryId;
     }
 
-    public void setEnd_time(Date end_time) {
-        this.end_time = end_time;
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
-
-
-
 }

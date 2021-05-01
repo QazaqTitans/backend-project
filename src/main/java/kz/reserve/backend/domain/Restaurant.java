@@ -1,6 +1,8 @@
 package kz.reserve.backend.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,6 +13,7 @@ public class Restaurant {
 
     private String name;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "restaurant"})
     @OneToOne(fetch = FetchType.EAGER)
     private User admin;
 

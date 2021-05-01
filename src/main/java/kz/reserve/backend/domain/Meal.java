@@ -1,27 +1,36 @@
 package kz.reserve.backend.domain;
 
-import org.springframework.data.annotation.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 public class Meal {
-    @javax.persistence.Id
+
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
-    private Long category_id;
-    private Long restaurant_id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Category category;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Restaurant restaurant;
+
     @Column(columnDefinition="TEXT")
     private String description;
+
     private String features;
+
     private double price;
-    private boolean is_finished;
-    private Date start_time;
-    private Date end_time;
+
+    private boolean isFinished;
+
+    private Long time;
+
     public Meal() {
     }
 
@@ -33,14 +42,6 @@ public class Meal {
         this.id = id;
     }
 
-    public Long getCategory_id() {
-        return category_id;
-    }
-
-    public void setCategory_id(Long category_id) {
-        this.category_id = category_id;
-    }
-
     public String getName() {
         return name;
     }
@@ -49,12 +50,20 @@ public class Meal {
         this.name = name;
     }
 
-    public Long getRestaurant_id() {
-        return restaurant_id;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setRestaurant_id(Long restaurant_id) {
-        this.restaurant_id = restaurant_id;
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     public String getDescription() {
@@ -81,27 +90,19 @@ public class Meal {
         this.price = price;
     }
 
-    public boolean isIs_finished() {
-        return is_finished;
+    public boolean isFinished() {
+        return isFinished;
     }
 
-    public void setIs_finished(boolean is_finished) {
-        this.is_finished = is_finished;
+    public void setFinished(boolean finished) {
+        isFinished = finished;
     }
 
-    public Date getStart_time() {
-        return start_time;
+    public Long getTime() {
+        return time;
     }
 
-    public void setStart_time(Date start_time) {
-        this.start_time = start_time;
-    }
-
-    public Date getEnd_time() {
-        return end_time;
-    }
-
-    public void setEnd_time(Date end_time) {
-        this.end_time = end_time;
+    public void setTime(Long time) {
+        this.time = time;
     }
 }
