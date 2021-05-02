@@ -5,6 +5,7 @@ import kz.reserve.backend.service.TableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -14,7 +15,7 @@ import javax.validation.constraints.Min;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/table")
-//@PreAuthorize("hasAuthority('restaurantAdmin')")
+@PreAuthorize("hasAuthority('restaurantAdmin')")
 public class TableController {
     @Autowired
     private TableService tableService;
