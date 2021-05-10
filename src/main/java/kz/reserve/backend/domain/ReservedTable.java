@@ -1,15 +1,35 @@
-package kz.reserve.backend.payload.request;
+package kz.reserve.backend.domain;
 
-import javax.validation.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class TableRequest {
-    @NotBlank
+import javax.persistence.*;
+
+@Entity(name = "reserved_table")
+public class ReservedTable {
+    @Id
+    @GeneratedValue (strategy = GenerationType.AUTO)
+    private Long id;
+
     private String name;
     private String imageSrc;
-    private Long restaurantId;
     private int reservePrice;
+    @Enumerated(EnumType.STRING)
+    private Position position;
     private boolean isForChildren;
     private boolean isTapchan;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Restaurant restaurant;
+
+    public ReservedTable() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -27,20 +47,20 @@ public class TableRequest {
         this.imageSrc = imageSrc;
     }
 
-    public Long getRestaurantId() {
-        return restaurantId;
-    }
-
-    public void setRestaurantId(Long restaurantId) {
-        this.restaurantId = restaurantId;
-    }
-
     public int getReservePrice() {
         return reservePrice;
     }
 
     public void setReservePrice(int reservePrice) {
         this.reservePrice = reservePrice;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     public boolean isForChildren() {
@@ -57,5 +77,13 @@ public class TableRequest {
 
     public void setTapchan(boolean tapchan) {
         isTapchan = tapchan;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 }
