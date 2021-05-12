@@ -26,7 +26,8 @@ public class TableService {
     private TableRepository tableRepository;
 
     public ResponseEntity<?> getTables() {
-        List<ReservedTable> reservedTableList = tableRepository.findAll();
+        User user = serviceUtils.getPrincipal();
+        List<ReservedTable> reservedTableList = tableRepository.findAllByRestaurant(user.getRestaurant());
         return ResponseEntity.ok(new TableResponse(reservedTableList));
     }
 
