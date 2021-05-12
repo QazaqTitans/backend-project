@@ -2,6 +2,7 @@ package kz.reserve.backend.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "orders")
@@ -26,6 +27,12 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     private OrderState state;
+
+    @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "table_id"))
+    private Set<ReservedTable> reservedTables;
 
     public Order() {}
 
@@ -91,5 +98,13 @@ public class Order {
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
+    }
+
+    public Set<ReservedTable> getReservedTables() {
+        return reservedTables;
+    }
+
+    public void setReservedTables(Set<ReservedTable> reservedTables) {
+        this.reservedTables = reservedTables;
     }
 }

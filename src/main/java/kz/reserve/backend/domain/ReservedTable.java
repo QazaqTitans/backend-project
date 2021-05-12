@@ -16,7 +16,8 @@ public class ReservedTable {
     @Enumerated(EnumType.STRING)
     private Position position;
     private boolean isForChildren;
-    private boolean isTapchan;
+    private Integer personCount;
+//    private boolean isTapchan;
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     private Restaurant restaurant;
@@ -71,12 +72,21 @@ public class ReservedTable {
         isForChildren = forChildren;
     }
 
-    public boolean isTapchan() {
-        return isTapchan;
+//    public boolean isTapchan() {
+//        return isTapchan;
+//    }
+//
+//    public void setTapchan(boolean tapchan) {
+//        isTapchan = tapchan;
+//    }
+
+
+    public Integer getPersonCount() {
+        return personCount;
     }
 
-    public void setTapchan(boolean tapchan) {
-        isTapchan = tapchan;
+    public void setPersonCount(Integer personCount) {
+        this.personCount = personCount;
     }
 
     public Restaurant getRestaurant() {

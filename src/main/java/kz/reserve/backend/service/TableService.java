@@ -24,10 +24,12 @@ public class TableService {
 
     @Autowired
     private TableRepository tableRepository;
+
     public ResponseEntity<?> getTables() {
         List<ReservedTable> reservedTableList = tableRepository.findAll();
         return ResponseEntity.ok(new TableResponse(reservedTableList));
     }
+
     public ResponseEntity<?> addTable(TableRequest tableRequest) {
         try {
             ReservedTable reservedTable = new ReservedTable();
@@ -40,7 +42,9 @@ public class TableService {
         }
 
         return ResponseEntity.ok(new MessageResponse("Success"));
-    }public ResponseEntity<?> updateTable(Long tableID, TableRequest tableRequest) {
+    }
+
+    public ResponseEntity<?> updateTable(Long tableID, TableRequest tableRequest) {
         try {
             ReservedTable reservedTable = tableRepository.getOne(tableID);
             tableCreator(tableRequest, reservedTable);
@@ -53,12 +57,14 @@ public class TableService {
 
     private void tableCreator(TableRequest tableRequest, ReservedTable reservedTable) {
         Restaurant restaurant = restaurantRepository.getOne(tableRequest.getRestaurantId());
-        reservedTable.setPosition(reservedTable.getPosition());
+
+        reservedTable.setPosition(tableRequest.getPosition());
         reservedTable.setName(tableRequest.getName());
         reservedTable.setImageSrc(tableRequest.getImageSrc());
         reservedTable.setReservePrice(tableRequest.getReservePrice());
-        reservedTable.setForChildren(tableRequest.isForChildren());
-        reservedTable.setTapchan(tableRequest.isTapchan());
+        reservedTable.setForChildren(tableRequest.getForChildren());
+        reservedTable.setPersonCount(tableRequest.getPersonCount());
+//        reservedTable.setTapchan(tableRequest.isTapchan());
         reservedTable.setRestaurant(restaurant);
 
 
