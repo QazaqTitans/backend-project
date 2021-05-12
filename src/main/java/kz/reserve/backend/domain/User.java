@@ -54,6 +54,16 @@ public class User {
         this.password = password;
     }
 
+    public User(@Size(max = 30) String name, @Size(max = 30) String surname, @NotBlank @Size(max = 50) @Email String email,
+                @Size(max = 50) String phoneNumber, @NotBlank @Size(max = 120) String password, Set<Role> roles) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+        this.roles = roles;
+    }
+
     public Long getId() {
         return id;
     }

@@ -1,6 +1,7 @@
 package kz.reserve.backend.service;
 
 import kz.reserve.backend.domain.Restaurant;
+import kz.reserve.backend.domain.Role;
 import kz.reserve.backend.domain.User;
 import kz.reserve.backend.payload.request.EmailRequest;
 import kz.reserve.backend.payload.request.RestaurantRequest;
@@ -15,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class RestaurantService {
@@ -40,12 +43,16 @@ public class RestaurantService {
         try {
             String password = serviceUtils.generatePassword(8);
 
-            User user = new User(restaurantRequest.getEmail(), passwordEncoder.encode(password));
+            Set<Role> roles = new HashSet<>();
+            roles.add(Role.restaurantAdmin);
+
+            User user = new User(restaurantRequest.getAdminName(), restaurantRequest.getAdminSurname(),
+                    restaurantRequest.getAdminEmail(),  restaurantRequest.getAdminPhone(), passwordEncoder.encode(password), roles);
             userRepository.save(user);
 
             Restaurant restaurant = new Restaurant();
 
-            restaurant.setName(restaurantRequest.getName());
+            restaurant.setName(restaurantRequest.getRestaurantName());
             restaurant.setAddress(restaurantRequest.getAddress());
             restaurant.setAdmin(user);
             restaurant.setDescription(restaurantRequest.getDescription());
@@ -72,7 +79,7 @@ public class RestaurantService {
         try {
             Restaurant restaurant = restaurantRepository.getOne(restaurantId);
 
-            restaurant.setName(restaurantRequest.getName());
+            restaurant.setName(restaurantRequest.getRestaurantName());
             restaurant.setMapCoordination(restaurantRequest.getMapCoordination());
             restaurant.setDescription(restaurantRequest.getDescription());
             restaurant.setAddress(restaurantRequest.getAddress());
