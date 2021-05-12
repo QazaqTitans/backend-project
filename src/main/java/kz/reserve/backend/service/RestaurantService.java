@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -105,7 +106,21 @@ public class RestaurantService {
 
     public ResponseEntity<?> updateUserOfRestaurant(Long restaurantId, EmailRequest emailRequest) {
         try {
-            User user = userRepository.findByEmail(emailRequest.getEmail()).get();
+            String password = serviceUtils.generatePassword(8);
+            Optional<User> optionalUser = userRepository.findByEmail(emailRequest.getAdminEmail());
+            User user = null;
+
+            if (optionalUser.isPresent())
+                user = optionalUser.get();
+            else {
+                Set<Role> roles = new HashSet<>();
+                roles.add(Role.restaurantAdmin);
+
+                user = new User(emailRequest.getAdminName(), emailRequest.getAdminSurname(),
+                    emailRequest.getAdminEmail(), emailRequest.getAdminPhone(), passwordEncoder.encode(password), roles);
+                userRepository.save(user);
+            }
+
             Restaurant restaurant = restaurantRepository.getOne(restaurantId);
 
             restaurant.setAdmin(user);
