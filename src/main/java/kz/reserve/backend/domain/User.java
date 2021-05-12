@@ -23,6 +23,9 @@ public class User {
     @Size(max = 30)
     private String name;
 
+    @Size(max = 30)
+    private String surname;
+
     @NotBlank
     @Size(max = 50)
     @Email
@@ -105,5 +108,13 @@ public class User {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 }
