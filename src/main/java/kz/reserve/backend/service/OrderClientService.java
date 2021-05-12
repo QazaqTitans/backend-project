@@ -3,6 +3,7 @@ package kz.reserve.backend.service;
 import kz.reserve.backend.domain.*;
 import kz.reserve.backend.payload.request.IOrderRequest;
 import kz.reserve.backend.payload.request.OrderRequest;
+import kz.reserve.backend.payload.request.OrderUserRequest;
 import kz.reserve.backend.payload.response.DiscountResponse;
 import kz.reserve.backend.payload.response.MessageResponse;
 import kz.reserve.backend.payload.response.OrderResponse;
@@ -15,7 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -40,16 +43,47 @@ public class OrderClientService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public ResponseEntity<?> makeOrderNewUser(OrderRequest orderRequest) {
+    public ResponseEntity<?> makeOrderExistUser(OrderUserRequest orderRequest) {
+
+        try {
+            if (orderRequest.getStartTime().isAfter(orderRequest.getEndTime()))
+                return ResponseEntity.badRequest().body(new MessageResponse("Time is not correct"));
+
 //        checking if there is empty table іздеу керек осы уақытта бос па деп
-        ReservedTable reservedTable = tableRepository.getOne((long)25);
+            ReservedTable reservedTable = getEmptyTable(orderRequest.getPersonCount(), orderRequest.getStartTime(),
+                    orderRequest.getEndTime(), orderRequest.getRestaurantId(), orderRequest.getPosition(), orderRequest.getChildren());
+
+            if (reservedTable == null)
+                return ResponseEntity.ok(new OrderResponse(null));
+
+            User user = serviceUtils.getPrincipal();
+
+            makeOrder(orderRequest, user, reservedTable);
+
+            return ResponseEntity.ok(new OrderResponse(reservedTable));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
+    }
+
+    public ResponseEntity<?> makeOrderNewUser(OrderRequest orderRequest) {
+        try {
+//        checking if there is empty table іздеу керек осы уақытта бос па деп
+            ReservedTable reservedTable = getEmptyTable(orderRequest.getPersonCount(), orderRequest.getStartTime(),
+                    orderRequest.getEndTime(), orderRequest.getRestaurantId(), orderRequest.getPosition(), orderRequest.getChildren());
+
+            if (reservedTable == null)
+                return ResponseEntity.ok(new OrderResponse(null));
 //        creating new user
-        User user = createUser(orderRequest);
+            User user = createUser(orderRequest);
 
 //        creating order
-        makeOrder(orderRequest, user, reservedTable);
+            makeOrder(orderRequest, user, reservedTable);
 
-        return ResponseEntity.ok(new OrderResponse(reservedTable));
+            return ResponseEntity.ok(new OrderResponse(reservedTable));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
     }
 
     public void makeOrder(IOrderRequest orderRequest, User user, ReservedTable reservedTable) {
@@ -100,5 +134,10 @@ public class OrderClientService {
         serviceUtils.sendMessageToUser(user, "Registration", message);
 
         return user;
+    }
+
+    private ReservedTable getEmptyTable(Integer personCount, LocalDateTime startTime, LocalDateTime endTime,
+                                        Long restaurantId, Position position, Boolean children) {
+        return tableRepository.findTableByConfigurations(startTime, endTime, personCount, position.name(), children, restaurantId);
     }
 }

@@ -16,7 +16,6 @@ public class OrderUserRequest implements IOrderRequest {
     @NotNull
     private LocalDateTime endTime;
 
-    @NotBlank
     private Position position;
 
     @NotNull

@@ -3,7 +3,6 @@ package kz.reserve.backend.controller;
 import kz.reserve.backend.payload.request.OrderRequest;
 import kz.reserve.backend.payload.request.OrderUserRequest;
 import kz.reserve.backend.service.OrderClientService;
-import kz.reserve.backend.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,11 +30,11 @@ public class OrderClientController {
         return orderClientService.makeOrderNewUser(orderRequest);
     }
 
-//    @PostMapping("/make-order-not-registered")
+    @PostMapping("/make-order")
     public ResponseEntity<?> makeOrderByUser(@Valid @RequestBody OrderUserRequest orderRequest) {
-        return null;
+        return orderClientService.makeOrderExistUser(orderRequest);
     }
-//
+
 //    @PostMapping
 //    public ResponseEntity<?> updateOrder() {
 //        return null;
