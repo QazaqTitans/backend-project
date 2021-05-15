@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashSet;
 import java.util.List;
@@ -40,7 +41,7 @@ public class RestaurantService {
         return ResponseEntity.ok(new RestaurantResponse(restaurantList));
     }
 
-    public ResponseEntity<?> addRestaurant(RestaurantRequest restaurantRequest) {
+    public ResponseEntity<?> addRestaurant(RestaurantRequest restaurantRequest, MultipartFile multipartFile) {
         try {
             String password = serviceUtils.generatePassword(8);
 
@@ -58,6 +59,7 @@ public class RestaurantService {
             restaurant.setAdmin(user);
             restaurant.setDescription(restaurantRequest.getDescription());
             restaurant.setMapCoordination(restaurantRequest.getMapCoordination());
+            restaurant.setImageSrc(serviceUtils.saveUploadedFile(multipartFile));
 
             restaurantRepository.save(restaurant);
 

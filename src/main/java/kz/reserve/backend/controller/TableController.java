@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -23,8 +24,8 @@ public class TableController {
     public ResponseEntity<?> getTables(){return tableService.getTables();}
 
     @PostMapping()
-    public ResponseEntity<?> addTable(@Valid @ModelAttribute TableRequest tableRequest) {
-        return tableService.addTable(tableRequest);
+    public ResponseEntity<?> addTable(@Valid @ModelAttribute TableRequest tableRequest, @RequestPart MultipartFile file) {
+        return tableService.addTable(tableRequest, file);
     }
     @PutMapping("/{id}")
     public ResponseEntity<?> updateTable(@Valid @Min(1) @PathVariable Long id, @Valid @ModelAttribute TableRequest tableRequest) {

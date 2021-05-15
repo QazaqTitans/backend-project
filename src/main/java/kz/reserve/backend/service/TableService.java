@@ -11,6 +11,7 @@ import kz.reserve.backend.repository.TableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -31,12 +32,13 @@ public class TableService {
         return ResponseEntity.ok(new TableResponse(reservedTableList));
     }
 
-    public ResponseEntity<?> addTable(TableRequest tableRequest) {
+    public ResponseEntity<?> addTable(TableRequest tableRequest, MultipartFile file) {
         try {
             ReservedTable reservedTable = new ReservedTable();
             User user = serviceUtils.getPrincipal();
 
             reservedTable.setRestaurant(user.getRestaurant());
+            reservedTable.setImageSrc(serviceUtils.saveUploadedFile(file));
             tableCreator(tableRequest, reservedTable);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
@@ -61,7 +63,6 @@ public class TableService {
 
         reservedTable.setPosition(tableRequest.getPosition());
         reservedTable.setName(tableRequest.getName());
-        reservedTable.setImageSrc(tableRequest.getImageSrc());
         reservedTable.setReservePrice(tableRequest.getReservePrice());
         reservedTable.setForChildren(tableRequest.getForChildren());
         reservedTable.setPersonCount(tableRequest.getPersonCount());

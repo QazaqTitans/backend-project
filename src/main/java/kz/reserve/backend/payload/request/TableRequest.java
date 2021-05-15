@@ -9,7 +9,6 @@ import javax.validation.constraints.NotBlank;
 public class TableRequest {
     @NotBlank
     private String name;
-    private String imageSrc;
     private Integer reservePrice;
 
     private Position position;
@@ -24,14 +23,6 @@ public class TableRequest {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getImageSrc() {
-        return imageSrc;
-    }
-
-    public void setImageSrc(String imageSrc) {
-        this.imageSrc = imageSrc;
     }
 
     public Integer getReservePrice() {

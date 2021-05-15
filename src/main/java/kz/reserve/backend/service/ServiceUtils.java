@@ -1,6 +1,7 @@
 package kz.reserve.backend.service;
 
 import kz.reserve.backend.configuration.UserDetailsImpl;
+import kz.reserve.backend.domain.Meal;
 import kz.reserve.backend.domain.User;
 import kz.reserve.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Random;
 
 @Service
@@ -25,6 +31,9 @@ public class ServiceUtils {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Value("${upload.folder}")
+    private String uploadFolder;
 
     public String generatePassword(int length) {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -56,5 +65,15 @@ public class ServiceUtils {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         return userRepository.getOne(userDetails.getId());
+    }
+
+    public String saveUploadedFile(MultipartFile file) throws IOException {
+        if (!file.isEmpty()) {
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get(uploadFolder + file.getOriginalFilename());
+            Files.write(path, bytes);
+            return path.toString();
+        }
+        return null;
     }
 }

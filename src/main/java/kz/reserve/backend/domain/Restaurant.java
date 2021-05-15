@@ -24,6 +24,8 @@ public class Restaurant {
 
     private String address;
 
+    public String imageSrc;
+
     public Restaurant() {}
 
     public String getName() {
@@ -72,5 +74,13 @@ public class Restaurant {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
+    }
+
+    public String getImageSrc() {
+        return imageSrc;
     }
 }

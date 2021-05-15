@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -27,8 +28,8 @@ public class RestaurantController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> addCategory(@Valid @ModelAttribute RestaurantRequest restaurantRequest) {
-        return restaurantService.addRestaurant(restaurantRequest);
+    public ResponseEntity<?> addCategory(@Valid @ModelAttribute RestaurantRequest restaurantRequest, @RequestPart MultipartFile multipartFile) {
+        return restaurantService.addRestaurant(restaurantRequest, multipartFile);
     }
 
     @PutMapping("/{id}")

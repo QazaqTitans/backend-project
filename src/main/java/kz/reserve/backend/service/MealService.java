@@ -31,9 +31,6 @@ public class MealService {
     @Autowired
     private ServiceUtils serviceUtils;
 
-    @Value("${upload.folder}")
-    private String uploadFolder;
-
     public ResponseEntity<?> getMeals() {
         User user = serviceUtils.getPrincipal();
         List<Meal> mealList = mealRepository.findByRestaurant(user.getRestaurant());
@@ -46,7 +43,7 @@ public class MealService {
             User user = serviceUtils.getPrincipal();
 
             meal.setRestaurant(user.getRestaurant());
-            saveUploadedFile(file, meal);
+            meal.setImageSrc(serviceUtils.saveUploadedFile(file));
             mealCreator(mealRequest, meal);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
@@ -78,15 +75,6 @@ public class MealService {
         meal.setTime(mealRequest.getTime());
 
         mealRepository.save(meal);
-    }
-
-    private void saveUploadedFile(MultipartFile file, Meal meal) throws IOException {
-        if (!file.isEmpty()) {
-            byte[] bytes = file.getBytes();
-            Path path = Paths.get(uploadFolder + file.getOriginalFilename());
-            Files.write(path, bytes);
-            meal.setImageSrc(path.toString());
-        }
     }
 
     public ResponseEntity<?> deleteMeal(Long mealId) {
