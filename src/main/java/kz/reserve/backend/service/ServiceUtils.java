@@ -19,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 public class ServiceUtils {
@@ -69,10 +70,11 @@ public class ServiceUtils {
 
     public String saveUploadedFile(MultipartFile file) throws IOException {
         if (!file.isEmpty()) {
+            UUID uuid = UUID.randomUUID();
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(uploadFolder + file.getOriginalFilename());
+            Path path = Paths.get(uploadFolder + uuid.toString());
             Files.write(path, bytes);
-            return path.toString();
+            return "/image/" + uuid.toString();
         }
         return null;
     }
