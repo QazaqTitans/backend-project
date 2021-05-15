@@ -31,6 +31,8 @@ public class Meal {
 
     private Long time;
 
+    private String imageSrc;
+
     public Meal() {
     }
 
@@ -104,5 +106,13 @@ public class Meal {
 
     public void setTime(Long time) {
         this.time = time;
+    }
+
+    public String getImageSrc() {
+        return imageSrc;
+    }
+
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
     }
 }

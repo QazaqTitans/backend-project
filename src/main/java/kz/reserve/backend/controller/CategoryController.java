@@ -28,12 +28,12 @@ public class CategoryController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> addCategory(@Valid @RequestBody CategoryRequest categoryRequest) {
+    public ResponseEntity<?> addCategory(@Valid @ModelAttribute CategoryRequest categoryRequest) {
         return categoryService.addCategory(categoryRequest);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCategory(@Valid @Min(1) @PathVariable Long id, @Valid @RequestBody CategoryRequest categoryRequest) {
+    public ResponseEntity<?> updateCategory(@Valid @Min(1) @PathVariable Long id, @Valid @ModelAttribute CategoryRequest categoryRequest) {
         return categoryService.updateCategory(id, categoryRequest);
     }
 

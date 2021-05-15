@@ -1,5 +1,7 @@
 package kz.reserve.backend.payload.request;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -24,6 +26,8 @@ public class MealRequest {
 
     @NotNull
     private Long categoryId;
+
+//    private MultipartFile multipartFile;
 
     public String getName() {
         return name;
@@ -80,4 +84,12 @@ public class MealRequest {
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
+
+//    public MultipartFile getMultipartFile() {
+//        return multipartFile;
+//    }
+//
+//    public void setMultipartFile(MultipartFile multipartFile) {
+//        this.multipartFile = multipartFile;
+//    }
 }
