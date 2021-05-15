@@ -12,6 +12,7 @@ import kz.reserve.backend.repository.MealRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 @Service
@@ -31,7 +32,7 @@ public class MealService {
         return ResponseEntity.ok(new MealResponse(mealList));
     }
 
-    public ResponseEntity<?> addMeal(MealRequest mealRequest) {
+    public ResponseEntity<?> addMeal(MealRequest mealRequest, MultipartFile uploadedFile) {
         try {
             Meal meal = new Meal();
             User user = serviceUtils.getPrincipal();
