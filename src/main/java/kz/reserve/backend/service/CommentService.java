@@ -1,0 +1,73 @@
+package kz.reserve.backend.service;
+
+import kz.reserve.backend.domain.Comment;
+import kz.reserve.backend.domain.Restaurant;
+import kz.reserve.backend.domain.User;
+import kz.reserve.backend.payload.request.CommentRequest;
+import kz.reserve.backend.payload.response.CommentResponse;
+import kz.reserve.backend.payload.response.MessageResponse;
+import kz.reserve.backend.repository.CommentRepository;
+import kz.reserve.backend.repository.RestaurantRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+@Service
+public class CommentService {
+    @Autowired
+    private CommentRepository commentRepository;
+    @Autowired
+    private ServiceUtils serviceUtils;
+
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+
+    public ResponseEntity<?> getComments() {
+        User user = serviceUtils.getPrincipal();
+        List<Comment> commentList = commentRepository.findAllByRestaurant(user.getRestaurant());
+        return ResponseEntity.ok(new CommentResponse(commentList));
+    }
+    private void commentCreator(CommentRequest commentRequest, Comment comment){
+        Restaurant restaurant = restaurantRepository.getOne(commentRequest.getRestaurantId());
+        comment.setStar(commentRequest.getStar());
+        comment.setText(commentRequest.getText());
+        comment.setRestaurant(restaurant);
+        commentRepository.save(comment);
+    }
+    public ResponseEntity<?> addComment(CommentRequest commentRequest) {
+        try {
+            Comment comment = new Comment();
+            User user = serviceUtils.getPrincipal();
+            comment.setRestaurant(user.getRestaurant());
+            commentCreator(commentRequest,comment);
+
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
+
+        return ResponseEntity.ok(new MessageResponse("Success"));
+    }
+    public ResponseEntity<?> updateComment(Long CommentId, CommentRequest commentRequest) {
+        try {
+            Comment comment = commentRepository.getOne(CommentId);
+            commentCreator(commentRequest,comment);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
+
+        return ResponseEntity.ok(new MessageResponse("Success"));
+    }
+    public ResponseEntity<?> deleteComment(Long commentId) {
+        try {
+            commentRepository.deleteById(commentId);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
+
+        return ResponseEntity.ok(new MessageResponse("Success"));
+    }
+
+
+}
