@@ -1,6 +1,7 @@
 package kz.reserve.backend.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 
@@ -9,13 +10,18 @@ public class Comment {
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
     private Long id;
-    @JsonIgnore
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "admin"})
     @ManyToOne(fetch = FetchType.EAGER)
     private Restaurant restaurant;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "restaurant"})
     @ManyToOne(fetch = FetchType.EAGER)
     private User client;
     private int star;
     private String text;
+
+    public Comment() {
+    }
 
     public Long getId() {
         return id;
@@ -55,8 +61,5 @@ public class Comment {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public Comment() {
     }
 }

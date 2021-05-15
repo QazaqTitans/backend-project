@@ -1,6 +1,4 @@
 package kz.reserve.backend.payload.response;
-
-
 import kz.reserve.backend.domain.Comment;
 
 import java.util.List;

@@ -23,16 +23,20 @@ public class CommentService {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
-    public ResponseEntity<?> getComments() {
+    public ResponseEntity<?> getComments(Long id) {
         User user = serviceUtils.getPrincipal();
-        List<Comment> commentList = commentRepository.findAllByRestaurant(user.getRestaurant());
+        Restaurant restaurant = restaurantRepository.getOne(id);
+        List<Comment> commentList = commentRepository.findAllByRestaurant(restaurant);
         return ResponseEntity.ok(new CommentResponse(commentList));
     }
     private void commentCreator(CommentRequest commentRequest, Comment comment){
         Restaurant restaurant = restaurantRepository.getOne(commentRequest.getRestaurantId());
+        User user = serviceUtils.getPrincipal();
         comment.setStar(commentRequest.getStar());
         comment.setText(commentRequest.getText());
         comment.setRestaurant(restaurant);
+        comment.setClient(user);
+
         commentRepository.save(comment);
     }
     public ResponseEntity<?> addComment(CommentRequest commentRequest) {
@@ -43,27 +47,8 @@ public class CommentService {
             commentCreator(commentRequest,comment);
 
 
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
-
-        return ResponseEntity.ok(new MessageResponse("Success"));
-    }
-    public ResponseEntity<?> updateComment(Long CommentId, CommentRequest commentRequest) {
-        try {
-            Comment comment = commentRepository.getOne(CommentId);
-            commentCreator(commentRequest,comment);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
-        }
-
-        return ResponseEntity.ok(new MessageResponse("Success"));
-    }
-    public ResponseEntity<?> deleteComment(Long commentId) {
-        try {
-            commentRepository.deleteById(commentId);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+       } catch (Exception e) {
+          return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
 
         return ResponseEntity.ok(new MessageResponse("Success"));

@@ -7,8 +7,6 @@ public class CommentRequest {
     private String text;
     private int star;
     private Long restaurantId;
-
-
     public Long getRestaurantId() {
         return restaurantId;
     }
