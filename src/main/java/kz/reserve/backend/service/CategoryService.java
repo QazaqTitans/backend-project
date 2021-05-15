@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -26,8 +27,11 @@ public class CategoryService {
         try {
             Category category = new Category();
 
+            Optional<Category> parentCategory = categoryRepository.findById(categoryRequest.getParentCategory());
+
             category.setName(categoryRequest.getName());
-            category.setParentCategory(categoryRequest.getParentCategory());
+            category.setParentCategory(parentCategory.orElse(null));
+
             categoryRepository.save(category);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
@@ -40,8 +44,10 @@ public class CategoryService {
         try {
             Category category = categoryRepository.getOne(categoryId);
 
+            Optional<Category> parentCategory = categoryRepository.findById(categoryRequest.getParentCategory());
+
             category.setName(categoryRequest.getName());
-            category.setParentCategory(category.getParentCategory());
+            category.setParentCategory(parentCategory.orElse(null));
 
             categoryRepository.save(category);
         } catch (Exception e) {

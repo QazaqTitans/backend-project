@@ -1,16 +1,12 @@
 package kz.reserve.backend.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.sun.istack.NotNull;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,6 +23,9 @@ public class User {
 
     @Size(max = 30)
     private String name;
+
+    @Size(max = 30)
+    private String surname;
 
     @NotBlank
     @Size(max = 50)
@@ -54,6 +53,16 @@ public class User {
     public User(String email, String password) {
         this.email = email;
         this.password = password;
+    }
+
+    public User(@Size(max = 30) String name, @Size(max = 30) String surname, @NotBlank @Size(max = 50) @Email String email,
+                @Size(max = 50) String phoneNumber, @NotBlank @Size(max = 120) String password, Set<Role> roles) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -110,5 +119,13 @@ public class User {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 }

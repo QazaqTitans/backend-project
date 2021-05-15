@@ -10,11 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
-@EnableAutoConfiguration
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/meal")
@@ -30,8 +30,9 @@ public class MealController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> addMeal(@Valid @RequestBody MealRequest mealrequest) {
-        return mealService.addMeal(mealrequest);
+    public ResponseEntity<?> addMeal(@Valid @RequestBody MealRequest mealrequest,
+                                     @RequestParam("uploadingFiles") MultipartFile uploadedFile) {
+        return mealService.addMeal(mealrequest, uploadedFile);
     }
 
     @PutMapping("/{id}")

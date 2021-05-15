@@ -9,6 +9,7 @@ import kz.reserve.backend.payload.response.JwtResponse;
 import kz.reserve.backend.payload.response.MessageResponse;
 import kz.reserve.backend.repository.UserRepository;
 import kz.reserve.backend.security.jwt.JwtUtils;
+import kz.reserve.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,6 +42,9 @@ public class AuthController {
     @Autowired
     private JwtUtils jwtUtils;
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping("/sign-in")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -52,9 +56,6 @@ public class AuthController {
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-//        List<String> roles = userDetails.getAuthorities().stream()
-//                .map(GrantedAuthority::getAuthority)
-//                .collect(Collectors.toList());
 
         return ResponseEntity.ok(new JwtResponse(
                 jwt,
@@ -62,24 +63,8 @@ public class AuthController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
-        }
-
-        // Create new user's account
-        User user = new User(signUpRequest.getEmail(),
-                passwordEncoder.encode(signUpRequest.getPassword()));
-
-        Set<Role> roles = new HashSet<>();
-        roles.add(Role.client);
-
-        user.setRoles(roles);
-        userRepository.save(user);
-
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
+        return userService.registerUser(signupRequest);
     }
 
     @PostMapping("/add-super-admin")
