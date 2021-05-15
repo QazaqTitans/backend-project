@@ -27,17 +27,17 @@ public class RestaurantController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> addCategory(@Valid @RequestBody RestaurantRequest restaurantRequest) {
+    public ResponseEntity<?> addCategory(@Valid @ModelAttribute RestaurantRequest restaurantRequest) {
         return restaurantService.addRestaurant(restaurantRequest);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateRestaurant(@Valid @Min(1) @PathVariable Long id, @Valid @RequestBody RestaurantRequest restaurantRequest) {
+    public ResponseEntity<?> updateRestaurant(@Valid @Min(1) @PathVariable Long id, @Valid @ModelAttribute RestaurantRequest restaurantRequest) {
         return restaurantService.updateRestaurant(id, restaurantRequest);
     }
 
     @PutMapping("/update-admin/{id}")
-    public ResponseEntity<?> updateRestaurant(@Valid @Min(1) @PathVariable Long id, @Valid @RequestBody EmailRequest emailRequest) {
+    public ResponseEntity<?> updateRestaurant(@Valid @Min(1) @PathVariable Long id, @Valid @ModelAttribute EmailRequest emailRequest) {
         return restaurantService.updateUserOfRestaurant(id, emailRequest);
     }
 

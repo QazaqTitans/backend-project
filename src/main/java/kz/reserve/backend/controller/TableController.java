@@ -23,11 +23,11 @@ public class TableController {
     public ResponseEntity<?> getTables(){return tableService.getTables();}
 
     @PostMapping()
-    public ResponseEntity<?> addTable(@Valid @RequestBody TableRequest tableRequest) {
+    public ResponseEntity<?> addTable(@Valid @ModelAttribute TableRequest tableRequest) {
         return tableService.addTable(tableRequest);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateTable(@Valid @Min(1) @PathVariable Long id, @Valid @RequestBody TableRequest tableRequest) {
+    public ResponseEntity<?> updateTable(@Valid @Min(1) @PathVariable Long id, @Valid @ModelAttribute TableRequest tableRequest) {
         return tableService.updateTable(id, tableRequest);
     }
 

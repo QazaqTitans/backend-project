@@ -23,11 +23,11 @@ public class DiscountController {
     public ResponseEntity<?> getDiscounts(){return discountService.getDiscounts();}
 
     @PostMapping()
-    public ResponseEntity<?> addDiscount(@Valid @RequestBody DiscountRequest discountRequest) {
+    public ResponseEntity<?> addDiscount(@Valid @ModelAttribute DiscountRequest discountRequest) {
         return discountService.addDiscount(discountRequest);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateDiscount(@Valid @Min(1) @PathVariable Long id, @Valid @RequestBody DiscountRequest discountRequest) {
+    public ResponseEntity<?> updateDiscount(@Valid @Min(1) @PathVariable Long id, @Valid @ModelAttribute DiscountRequest discountRequest) {
         return discountService.updateDiscount(id, discountRequest);
     }
 

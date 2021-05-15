@@ -10,10 +10,15 @@ import kz.reserve.backend.payload.response.MessageResponse;
 import kz.reserve.backend.repository.CategoryRepository;
 import kz.reserve.backend.repository.MealRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 @Service
 public class MealService {
@@ -26,18 +31,22 @@ public class MealService {
     @Autowired
     private ServiceUtils serviceUtils;
 
+    @Value("${upload.folder}")
+    private String uploadFolder;
+
     public ResponseEntity<?> getMeals() {
         User user = serviceUtils.getPrincipal();
         List<Meal> mealList = mealRepository.findByRestaurant(user.getRestaurant());
         return ResponseEntity.ok(new MealResponse(mealList));
     }
 
-    public ResponseEntity<?> addMeal(MealRequest mealRequest, MultipartFile uploadedFile) {
+    public ResponseEntity<?> addMeal(MealRequest mealRequest, MultipartFile file) {
         try {
             Meal meal = new Meal();
             User user = serviceUtils.getPrincipal();
 
             meal.setRestaurant(user.getRestaurant());
+            saveUploadedFile(file, meal);
             mealCreator(mealRequest, meal);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
@@ -57,7 +66,7 @@ public class MealService {
         return ResponseEntity.ok(new MessageResponse("Success"));
     }
 
-    private void mealCreator(MealRequest mealRequest, Meal meal) {
+    private void mealCreator(MealRequest mealRequest, Meal meal) throws IOException {
         Category category = categoryRepository.getOne(mealRequest.getCategoryId());
 
         meal.setCategory(category);
@@ -69,6 +78,15 @@ public class MealService {
         meal.setTime(mealRequest.getTime());
 
         mealRepository.save(meal);
+    }
+
+    private void saveUploadedFile(MultipartFile file, Meal meal) throws IOException {
+        if (!file.isEmpty()) {
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get(uploadFolder + file.getOriginalFilename());
+            Files.write(path, bytes);
+            meal.setImageSrc(path.toString());
+        }
     }
 
     public ResponseEntity<?> deleteMeal(Long mealId) {

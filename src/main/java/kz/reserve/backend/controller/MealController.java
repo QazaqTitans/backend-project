@@ -30,13 +30,12 @@ public class MealController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> addMeal(@Valid @RequestBody MealRequest mealrequest,
-                                     @RequestParam("uploadingFiles") MultipartFile uploadedFile) {
-        return mealService.addMeal(mealrequest, uploadedFile);
+    public ResponseEntity<?> addMeal(@Valid @ModelAttribute MealRequest mealrequest, @RequestPart(required = true) MultipartFile file) {
+        return mealService.addMeal(mealrequest, file);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateMeal(@Valid @Min(1) @PathVariable Long id, @Valid @RequestBody MealRequest mealRequest) {
+    public ResponseEntity<?> updateMeal(@Valid @Min(1) @PathVariable Long id, @Valid @ModelAttribute MealRequest mealRequest) {
         return mealService.updateMeal(id, mealRequest);
     }
 
