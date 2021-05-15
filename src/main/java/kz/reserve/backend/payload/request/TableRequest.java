@@ -1,22 +1,32 @@
 package kz.reserve.backend.payload.request;
 
-import kz.reserve.backend.domain.Position;
-
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
 
 public class TableRequest {
     @NotBlank
     private String name;
-    private String imageSrc;
-    private Integer reservePrice;
+    private String image_src;
+    private Long restaurant_id;
+    private int reserve_price;
+    private boolean for_children;
+    private boolean tapchan;
 
-    private Position position;
 
-    private Boolean isForChildren;
-    private Integer personCount;
-    private Long restaurantId;
+    public boolean isTapchan() {
+        return tapchan;
+    }
+
+    public void setTapchan(boolean tapchan) {
+        this.tapchan = tapchan;
+    }
+
+    public boolean isFor_children() {
+        return for_children;
+    }
+
+    public void setFor_children(boolean for_children) {
+        this.for_children = for_children;
+    }
 
     public String getName() {
         return name;
@@ -26,51 +36,27 @@ public class TableRequest {
         this.name = name;
     }
 
-    public String getImageSrc() {
-        return imageSrc;
+    public String getImage_src() {
+        return image_src;
     }
 
-    public void setImageSrc(String imageSrc) {
-        this.imageSrc = imageSrc;
+    public void setImage_src(String image_src) {
+        this.image_src = image_src;
     }
 
-    public Integer getReservePrice() {
-        return reservePrice;
+    public Long getRestaurant_id() {
+        return restaurant_id;
     }
 
-    public void setReservePrice(Integer reservePrice) {
-        this.reservePrice = reservePrice;
+    public void setRestaurant_id(Long restaurant_id) {
+        this.restaurant_id = restaurant_id;
     }
 
-    public Position getPosition() {
-        return position;
+    public int getReserve_price() {
+        return reserve_price;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
-    }
-
-    public Boolean getForChildren() {
-        return isForChildren;
-    }
-
-    public void setForChildren(Boolean forChildren) {
-        isForChildren = forChildren;
-    }
-
-    public Integer getPersonCount() {
-        return personCount;
-    }
-
-    public void setPersonCount(Integer personCount) {
-        this.personCount = personCount;
-    }
-
-    public Long getRestaurantId() {
-        return restaurantId;
-    }
-
-    public void setRestaurantId(Long restaurantId) {
-        this.restaurantId = restaurantId;
+    public void setReserve_price(int reserve_price) {
+        this.reserve_price = reserve_price;
     }
 }

@@ -8,7 +8,7 @@ public class CategoryRequest {
     @NotBlank
     private String name;
 
-    private Long parentCategory;
+    private Category parentCategory;
 
     public String getName() {
         return name;
@@ -18,11 +18,11 @@ public class CategoryRequest {
         this.name = name;
     }
 
-    public Long getParentCategory() {
+    public Category getParentCategory() {
         return parentCategory;
     }
 
-    public void setParentCategory(Long parentCategory) {
+    public void setParentCategory(Category parentCategory) {
         this.parentCategory = parentCategory;
     }
 }

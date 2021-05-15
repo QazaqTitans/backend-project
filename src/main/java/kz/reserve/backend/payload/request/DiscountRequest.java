@@ -4,7 +4,7 @@ public class DiscountRequest {
     @NotBlank
     private String description;
     private Long restaurant_id;
-    private double percentage;
+    private int percentage;
 
     public String getDescription() {
         return description;
@@ -26,7 +26,7 @@ public class DiscountRequest {
         return percentage;
     }
 
-    public void setPercentage(double percentage) {
+    public void setPercentage(int percentage) {
         this.percentage = percentage;
     }
 }

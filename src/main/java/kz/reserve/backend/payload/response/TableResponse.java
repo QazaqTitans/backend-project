@@ -1,19 +1,19 @@
 package kz.reserve.backend.payload.response;
 
-import kz.reserve.backend.domain.ReservedTable;
+import kz.reserve.backend.domain.Table;
 
 import java.util.List;
 
 public class TableResponse {
-    private List<ReservedTable> reservedTableList;
-    public TableResponse(List<ReservedTable> reservedTableList){
-        this.reservedTableList = reservedTableList;
+    private List<Table> tableList;
+    public TableResponse(List<Table> tableList){
+        this.tableList=tableList;
     }
-    public List<ReservedTable> getTableList() {
-        return reservedTableList;
+    public List<Table> getTableList() {
+        return tableList;
     }
 
-    public void setTableList(List<ReservedTable> reservedTableList) {
-        this.reservedTableList = reservedTableList;
+    public void setTableList(List<Table> tableList) {
+        this.tableList = tableList;
     }
 }

@@ -1,7 +1,7 @@
 package kz.reserve.backend.service;
 
 import kz.reserve.backend.domain.Restaurant;
-import kz.reserve.backend.domain.ReservedTable;
+import kz.reserve.backend.domain.Table;
 import kz.reserve.backend.domain.User;
 import kz.reserve.backend.payload.request.TableRequest;
 import kz.reserve.backend.payload.response.MessageResponse;
@@ -24,31 +24,26 @@ public class TableService {
 
     @Autowired
     private TableRepository tableRepository;
-
     public ResponseEntity<?> getTables() {
-        User user = serviceUtils.getPrincipal();
-        List<ReservedTable> reservedTableList = tableRepository.findAllByRestaurant(user.getRestaurant());
-        return ResponseEntity.ok(new TableResponse(reservedTableList));
+        List<Table> tableList = tableRepository.findAll();
+        return ResponseEntity.ok(new TableResponse(tableList));
     }
-
     public ResponseEntity<?> addTable(TableRequest tableRequest) {
         try {
-            ReservedTable reservedTable = new ReservedTable();
+            Table table= new Table();
             User user = serviceUtils.getPrincipal();
 
-            reservedTable.setRestaurant(user.getRestaurant());
-            tableCreator(tableRequest, reservedTable);
+            table.setRestaurant(user.getRestaurant());
+            tableCreator(tableRequest, table);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
 
         return ResponseEntity.ok(new MessageResponse("Success"));
-    }
-
-    public ResponseEntity<?> updateTable(Long tableID, TableRequest tableRequest) {
+    }public ResponseEntity<?> updateTable(Long tableID, TableRequest tableRequest) {
         try {
-            ReservedTable reservedTable = tableRepository.getOne(tableID);
-            tableCreator(tableRequest, reservedTable);
+            Table table = tableRepository.getOne(tableID);
+            tableCreator(tableRequest, table);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
@@ -56,20 +51,18 @@ public class TableService {
         return ResponseEntity.ok(new MessageResponse("Success"));
     }
 
-    private void tableCreator(TableRequest tableRequest, ReservedTable reservedTable) {
-        Restaurant restaurant = restaurantRepository.getOne(tableRequest.getRestaurantId());
-
-        reservedTable.setPosition(tableRequest.getPosition());
-        reservedTable.setName(tableRequest.getName());
-        reservedTable.setImageSrc(tableRequest.getImageSrc());
-        reservedTable.setReservePrice(tableRequest.getReservePrice());
-        reservedTable.setForChildren(tableRequest.getForChildren());
-        reservedTable.setPersonCount(tableRequest.getPersonCount());
-//        reservedTable.setTapchan(tableRequest.isTapchan());
-        reservedTable.setRestaurant(restaurant);
+    private void tableCreator(TableRequest tableRequest, Table table) {
+        Restaurant restaurant = restaurantRepository.getOne(tableRequest.getRestaurant_id());
+        table.setPosition(table.getPosition());
+        table.setName(tableRequest.getName());
+        table.setImage_src(tableRequest.getImage_src());
+        table.setReserve_price(tableRequest.getReserve_price());
+        table.setIs_for_children(tableRequest.isFor_children());
+        table.setIs_tapchan(tableRequest.isTapchan());
+        table.setRestaurant(restaurant);
 
 
-        tableRepository.save(reservedTable);
+        tableRepository.save(table);
     }
 
     public ResponseEntity<?> deleteTable(Long tableID) {
