@@ -26,6 +26,16 @@ public class CategoryController {
         return categoryService.getCategories();
     }
 
+    @GetMapping("/parents")
+    public ResponseEntity<?> getParentCategories() {
+        return categoryService.getParentCategories();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getCategories(@Valid @PathVariable Long id) {
+        return categoryService.getCategories(id);
+    }
+
     @PreAuthorize("hasAuthority('superAdmin')")
     @PostMapping()
     public ResponseEntity<?> addCategory(@Valid @ModelAttribute CategoryRequest categoryRequest) {

@@ -23,6 +23,16 @@ public class CategoryService {
         return ResponseEntity.ok(new CategoryResponse(categoryList));
     }
 
+    public ResponseEntity<?> getParentCategories() {
+        List<Category> categoryList = categoryRepository.findAllByParentCategoryIsNull();
+        return ResponseEntity.ok(new CategoryResponse(categoryList));
+    }
+
+    public ResponseEntity<?> getCategories(Long id) {
+        List<Category> categoryList = categoryRepository.findAllByParentCategoryId(id);
+        return ResponseEntity.ok(new CategoryResponse(categoryList));
+    }
+
     public ResponseEntity<?> addCategory(CategoryRequest categoryRequest) {
         try {
             Category category = new Category();
