@@ -8,16 +8,12 @@ public class RestaurantRequest {
     @NotBlank
     private String restaurantName;
 
-    @NotBlank
     private String adminName;
 
-    @NotBlank
     private String adminSurname;
 
-    @NotBlank
     private String adminPhone;
 
-    @NotBlank
     private String adminEmail;
 
     @NotBlank
@@ -28,6 +24,10 @@ public class RestaurantRequest {
 
     @NotBlank
     private String address;
+
+    private Integer minPrice;
+
+    private Integer maxPrice;
 
     public String getRestaurantName() {
         return restaurantName;
@@ -91,5 +91,21 @@ public class RestaurantRequest {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Integer getMinPrice() {
+        return minPrice;
+    }
+
+    public void setMinPrice(Integer minPrice) {
+        this.minPrice = minPrice;
+    }
+
+    public Integer getMaxPrice() {
+        return maxPrice;
+    }
+
+    public void setMaxPrice(Integer maxPrice) {
+        this.maxPrice = maxPrice;
     }
 }

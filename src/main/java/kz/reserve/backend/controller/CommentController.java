@@ -15,7 +15,7 @@ import javax.validation.constraints.Min;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
 @RequestMapping("/api/comment")
-@PreAuthorize("hasAuthority('client')")
+
 public class CommentController {
     @Autowired
     private CommentService commentService;
@@ -24,6 +24,7 @@ public class CommentController {
     public ResponseEntity<?> getComments(@Valid @Min(1) @PathVariable Long id){
         return commentService.getComments(id);}
 
+    @PreAuthorize("hasAuthority('client')")
     @PostMapping()
     public ResponseEntity<?> addComment(@Valid @RequestBody CommentRequest commentRequest) {
         return commentService.addComment(commentRequest);

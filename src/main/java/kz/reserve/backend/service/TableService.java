@@ -59,7 +59,7 @@ public class TableService {
     }
 
     private void tableCreator(TableRequest tableRequest, ReservedTable reservedTable) {
-        Restaurant restaurant = restaurantRepository.getOne(tableRequest.getRestaurantId());
+//        Restaurant restaurant = restaurantRepository.getOne(tableRequest.getRestaurantId());
 
         reservedTable.setPosition(tableRequest.getPosition());
         reservedTable.setName(tableRequest.getName());
@@ -67,7 +67,7 @@ public class TableService {
         reservedTable.setForChildren(tableRequest.getForChildren());
         reservedTable.setPersonCount(tableRequest.getPersonCount());
 //        reservedTable.setTapchan(tableRequest.isTapchan());
-        reservedTable.setRestaurant(restaurant);
+//        reservedTable.setRestaurant(restaurant);
 
 
         tableRepository.save(reservedTable);

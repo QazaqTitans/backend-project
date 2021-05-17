@@ -4,6 +4,7 @@ package kz.reserve.backend.controller;
 import kz.reserve.backend.payload.request.CategoryRequest;
 import kz.reserve.backend.payload.request.EmailRequest;
 import kz.reserve.backend.payload.request.RestaurantRequest;
+import kz.reserve.backend.payload.request.SearchRequest;
 import kz.reserve.backend.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,8 @@ public class RestaurantController {
 
     @PreAuthorize("hasAuthority('superAdmin')")
     @PostMapping()
-    public ResponseEntity<?> addCategory(@Valid @ModelAttribute RestaurantRequest restaurantRequest, @RequestPart MultipartFile multipartFile) {
+    public ResponseEntity<?> addCategory(@Valid @ModelAttribute RestaurantRequest restaurantRequest,
+                                         @RequestPart MultipartFile multipartFile) {
         return restaurantService.addRestaurant(restaurantRequest, multipartFile);
     }
 
@@ -48,5 +50,10 @@ public class RestaurantController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteRestaurant(@Valid @Min(1) @PathVariable Long id) {
         return restaurantService.deleteRestaurant(id);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchRestaurants(@Valid @ModelAttribute SearchRequest searchRequest) {
+        return restaurantService.searchRestaurants(searchRequest);
     }
 }

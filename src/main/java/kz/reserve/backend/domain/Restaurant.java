@@ -26,6 +26,10 @@ public class Restaurant {
 
     public String imageSrc;
 
+    public Integer minPrice;
+
+    public Integer maxPrice;
+
     public Restaurant() {}
 
     public String getName() {
@@ -82,5 +86,21 @@ public class Restaurant {
 
     public String getImageSrc() {
         return imageSrc;
+    }
+
+    public Integer getMinPrice() {
+        return minPrice;
+    }
+
+    public void setMinPrice(Integer minPrice) {
+        this.minPrice = minPrice;
+    }
+
+    public Integer getMaxPrice() {
+        return maxPrice;
+    }
+
+    public void setMaxPrice(Integer maxPrice) {
+        this.maxPrice = maxPrice;
     }
 }

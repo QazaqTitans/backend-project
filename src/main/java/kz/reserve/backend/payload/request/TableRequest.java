@@ -15,7 +15,6 @@ public class TableRequest {
 
     private Boolean isForChildren;
     private Integer personCount;
-    private Long restaurantId;
 
     public String getName() {
         return name;
@@ -55,13 +54,5 @@ public class TableRequest {
 
     public void setPersonCount(Integer personCount) {
         this.personCount = personCount;
-    }
-
-    public Long getRestaurantId() {
-        return restaurantId;
-    }
-
-    public void setRestaurantId(Long restaurantId) {
-        this.restaurantId = restaurantId;
     }
 }

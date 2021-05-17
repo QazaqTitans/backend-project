@@ -24,7 +24,7 @@ public class CommentService {
     private RestaurantRepository restaurantRepository;
 
     public ResponseEntity<?> getComments(Long id) {
-        User user = serviceUtils.getPrincipal();
+//        User user = serviceUtils.getPrincipal();
         Restaurant restaurant = restaurantRepository.getOne(id);
         List<Comment> commentList = commentRepository.findAllByRestaurant(restaurant);
         return ResponseEntity.ok(new CommentResponse(commentList));
