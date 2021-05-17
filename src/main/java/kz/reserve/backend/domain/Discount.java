@@ -1,6 +1,7 @@
 package kz.reserve.backend.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 
@@ -11,11 +12,12 @@ public class Discount {
     private Long id;
     private String description;
     private double percentage;
-    @JsonIgnore
+
+    @JsonIgnoreProperties({"admin"})
     @ManyToOne(fetch = FetchType.EAGER)
     private Restaurant restaurant;
 
-    @JsonIgnore
+    @JsonIgnoreProperties({"restaurant"})
     @ManyToOne(fetch = FetchType.EAGER)
     private Meal meal;
 
