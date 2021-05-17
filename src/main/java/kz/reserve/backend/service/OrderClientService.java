@@ -2,25 +2,21 @@ package kz.reserve.backend.service;
 
 import kz.reserve.backend.domain.*;
 import kz.reserve.backend.payload.request.IOrderRequest;
+import kz.reserve.backend.payload.request.OrderMealRequest;
 import kz.reserve.backend.payload.request.OrderRequest;
 import kz.reserve.backend.payload.request.OrderUserRequest;
 import kz.reserve.backend.payload.response.DiscountResponse;
 import kz.reserve.backend.payload.response.MessageResponse;
 import kz.reserve.backend.payload.response.OrderResponse;
-import kz.reserve.backend.repository.OrderRepository;
-import kz.reserve.backend.repository.RestaurantRepository;
-import kz.reserve.backend.repository.TableRepository;
-import kz.reserve.backend.repository.UserRepository;
+import kz.reserve.backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Service
 public class OrderClientService {
@@ -43,24 +39,32 @@ public class OrderClientService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private MealRepository mealRepository;
+
     public ResponseEntity<?> makeOrderExistUser(OrderUserRequest orderRequest) {
 
         try {
-            if (orderRequest.getStartTime().isAfter(orderRequest.getEndTime()))
+            DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime startTime = LocalDateTime.parse(orderRequest.getStartTime(), dateTimeFormat);
+            LocalDateTime endTime = LocalDateTime.parse(orderRequest.getEndTime(), dateTimeFormat);
+
+            if (startTime.isAfter(endTime))
                 return ResponseEntity.badRequest().body(new MessageResponse("Time is not correct"));
 
+
 //        checking if there is empty table іздеу керек осы уақытта бос па деп
-            ReservedTable reservedTable = getEmptyTable(orderRequest.getPersonCount(), orderRequest.getStartTime(),
-                    orderRequest.getEndTime(), orderRequest.getRestaurantId(), orderRequest.getPosition(), orderRequest.getChildren());
+            ReservedTable reservedTable = getEmptyTable(orderRequest.getPersonCount(), startTime,
+                    endTime, orderRequest.getRestaurantId(), orderRequest.getPosition(), orderRequest.getChildren());
 
             if (reservedTable == null)
-                return ResponseEntity.ok(new OrderResponse(null));
+                return ResponseEntity.ok(new OrderResponse(null, null));
 
             User user = serviceUtils.getPrincipal();
 
-            makeOrder(orderRequest, user, reservedTable);
+            Order order = makeOrder(orderRequest, user, reservedTable, startTime, endTime);
 
-            return ResponseEntity.ok(new OrderResponse(reservedTable));
+            return ResponseEntity.ok(new OrderResponse(reservedTable, order));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
@@ -68,31 +72,35 @@ public class OrderClientService {
 
     public ResponseEntity<?> makeOrderNewUser(OrderRequest orderRequest) {
         try {
+            DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime startTime = LocalDateTime.parse(orderRequest.getStartTime(), dateTimeFormat);
+            LocalDateTime endTime = LocalDateTime.parse(orderRequest.getEndTime(), dateTimeFormat);
 //        checking if there is empty table іздеу керек осы уақытта бос па деп
-            ReservedTable reservedTable = getEmptyTable(orderRequest.getPersonCount(), orderRequest.getStartTime(),
-                    orderRequest.getEndTime(), orderRequest.getRestaurantId(), orderRequest.getPosition(), orderRequest.getChildren());
+            ReservedTable reservedTable = getEmptyTable(orderRequest.getPersonCount(), startTime,
+                    endTime, orderRequest.getRestaurantId(), orderRequest.getPosition(), orderRequest.getChildren());
 
             if (reservedTable == null)
-                return ResponseEntity.ok(new OrderResponse(null));
+                return ResponseEntity.ok(new OrderResponse(null, null));
 //        creating new user
             User user = createUser(orderRequest);
 
 //        creating order
-            makeOrder(orderRequest, user, reservedTable);
+            Order order = makeOrder(orderRequest, user, reservedTable, startTime, endTime);
 
-            return ResponseEntity.ok(new OrderResponse(reservedTable));
+            return ResponseEntity.ok(new OrderResponse(reservedTable, order));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
     }
 
-    public void makeOrder(IOrderRequest orderRequest, User user, ReservedTable reservedTable) {
+    public Order makeOrder(IOrderRequest orderRequest, User user, ReservedTable reservedTable, LocalDateTime startTime,
+                           LocalDateTime endTime) {
         Order order = new Order();
         Restaurant restaurant = restaurantRepository.getOne(orderRequest.getRestaurantId());
 
         order.setClient(user);
-        order.setStartTime(orderRequest.getStartTime());
-        order.setEndTime(orderRequest.getEndTime());
+        order.setStartTime(startTime);
+        order.setEndTime(endTime);
         order.setFeatures(orderRequest.getFeatures());
         order.setPersonCount(orderRequest.getPersonCount());
         order.setState(OrderState.pending);
@@ -104,6 +112,8 @@ public class OrderClientService {
         order.setReservedTables(reservedTables);
 
         orderRepository.save(order);
+
+        return order;
     }
 
     public User createUser(OrderRequest orderRequest) {
@@ -139,5 +149,25 @@ public class OrderClientService {
     private ReservedTable getEmptyTable(Integer personCount, LocalDateTime startTime, LocalDateTime endTime,
                                         Long restaurantId, Position position, Boolean children) {
         return tableRepository.findTableByConfigurations(startTime, endTime, personCount, position.name(), children, restaurantId);
+    }
+
+    public ResponseEntity<?> addMealForOrder(Long orderId, OrderMealRequest orderMealRequest) {
+        try {
+            Order order = orderRepository.getOne(orderId);
+            Set<Meal> meals = new HashSet<>();
+
+            for (Long mealId : orderMealRequest.getMealIds()) {
+                Meal meal = mealRepository.getOne(mealId);
+                meals.add(meal);
+            }
+
+            order.setMeals(meals);
+
+            orderRepository.save(order);
+
+            return ResponseEntity.ok(new OrderResponse(null, order));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
     }
 }

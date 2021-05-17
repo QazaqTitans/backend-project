@@ -1,5 +1,7 @@
 package kz.reserve.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -12,9 +14,11 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "restaurant"})
     @ManyToOne(fetch = FetchType.EAGER)
     private User client;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "admin"})
     @ManyToOne(fetch = FetchType.EAGER)
     private Restaurant restaurant;
 
@@ -33,6 +37,13 @@ public class Order {
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "table_id"))
     private Set<ReservedTable> reservedTables;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer"})
+    @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "meal_id"))
+    private Set<Meal> meals;
 
     public Order() {}
 
@@ -106,5 +117,13 @@ public class Order {
 
     public void setReservedTables(Set<ReservedTable> reservedTables) {
         this.reservedTables = reservedTables;
+    }
+
+    public Set<Meal> getMeals() {
+        return meals;
+    }
+
+    public void setMeals(Set<Meal> meals) {
+        this.meals = meals;
     }
 }

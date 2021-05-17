@@ -64,6 +64,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/webjars/**").permitAll()
                     .antMatchers("/api/client/order/make-order-not-registered").permitAll()
                     .antMatchers("/image/**").permitAll()
+                    .antMatchers("/api/discount/**").permitAll()
+                    .antMatchers("/api/meal/**").permitAll()
+                    .antMatchers("/api/restaurant/**").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

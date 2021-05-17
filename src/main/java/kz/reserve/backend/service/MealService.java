@@ -9,6 +9,7 @@ import kz.reserve.backend.payload.response.MealResponse;
 import kz.reserve.backend.payload.response.MessageResponse;
 import kz.reserve.backend.repository.CategoryRepository;
 import kz.reserve.backend.repository.MealRepository;
+import kz.reserve.backend.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -29,11 +30,20 @@ public class MealService {
     private CategoryRepository categoryRepository;
 
     @Autowired
+    private RestaurantRepository restaurantRepository;
+
+    @Autowired
     private ServiceUtils serviceUtils;
 
     public ResponseEntity<?> getMeals() {
         User user = serviceUtils.getPrincipal();
         List<Meal> mealList = mealRepository.findByRestaurant(user.getRestaurant());
+        return ResponseEntity.ok(new MealResponse(mealList));
+    }
+
+    public ResponseEntity<?> getMeals(Long restaurantId) {
+        Restaurant restaurant = restaurantRepository.getOne(restaurantId);
+        List<Meal> mealList = mealRepository.findByRestaurant(restaurant);
         return ResponseEntity.ok(new MealResponse(mealList));
     }
 

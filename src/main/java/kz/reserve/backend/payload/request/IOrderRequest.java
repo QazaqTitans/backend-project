@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 
 public interface IOrderRequest {
     Integer getPersonCount();
-    LocalDateTime getStartTime();
-    LocalDateTime getEndTime();
+    String getStartTime();
+    String getEndTime();
     Position getPosition();
     Boolean getChildren();
     Long getRestaurantId();

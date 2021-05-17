@@ -30,9 +30,23 @@ public class DiscountService {
     private MealRepository mealRepository;
 
     public ResponseEntity<?> getDiscounts() {
+        User user = serviceUtils.getPrincipal();
+        List<Discount> discountList = discountRepository.findByRestaurant(user.getRestaurant());
+        return ResponseEntity.ok(new DiscountResponse(discountList));
+    }
+
+    public ResponseEntity<?> getDiscounts(Long restaurantId) {
+        Restaurant restaurant = restaurantRepository.getOne(restaurantId);
+        List<Discount> discountList = discountRepository.findByRestaurant(restaurant);
+        return ResponseEntity.ok(new DiscountResponse(discountList));
+    }
+
+
+    public ResponseEntity<?> getDiscountsAll() {
         List<Discount> discountList = discountRepository.findAll();
         return ResponseEntity.ok(new DiscountResponse(discountList));
     }
+
     public ResponseEntity<?> addDiscount(DiscountRequest discountRequest) {
         try {
             Discount discount = new Discount();

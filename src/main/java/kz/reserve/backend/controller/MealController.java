@@ -23,9 +23,15 @@ public class MealController {
     @Autowired
     private MealService mealService;
 
+    @PreAuthorize("hasAuthority('restaurantAdmin')")
     @GetMapping()
     public ResponseEntity<?> getMeals() {
         return mealService.getMeals();
+    }
+
+    @GetMapping("/{restaurantId}")
+    public ResponseEntity<?> getMeals(@PathVariable Long restaurantId) {
+        return mealService.getMeals(restaurantId);
     }
 
     @PreAuthorize("hasAuthority('restaurantAdmin')")
