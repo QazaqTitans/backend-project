@@ -12,6 +12,7 @@ import kz.reserve.backend.security.jwt.JwtUtils;
 import kz.reserve.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -65,6 +67,11 @@ public class AuthController {
     @PostMapping("/sign-up")
     public ResponseEntity<?> registerUser(@Valid @ModelAttribute SignupRequest signupRequest) {
         return userService.registerUser(signupRequest);
+    }
+
+    @PostMapping("/me")
+    public ResponseEntity<?> userInfo() {
+        return userService.userInfo();
     }
 
     @PostMapping("/add-super-admin")

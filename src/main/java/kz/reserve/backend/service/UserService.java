@@ -3,7 +3,9 @@ package kz.reserve.backend.service;
 import kz.reserve.backend.domain.Role;
 import kz.reserve.backend.domain.User;
 import kz.reserve.backend.payload.request.SignupRequest;
+import kz.reserve.backend.payload.response.AllUserResponse;
 import kz.reserve.backend.payload.response.MessageResponse;
+import kz.reserve.backend.payload.response.UserResponse;
 import kz.reserve.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -57,6 +60,35 @@ public class UserService {
             serviceUtils.sendMessageToUser(user, "Registration", message);
 
             return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
+    }
+
+    public ResponseEntity<?> userInfo() {
+        try {
+            User user = serviceUtils.getPrincipal();
+
+            return ResponseEntity.ok(new UserResponse(user));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
+    }
+
+    public ResponseEntity<?> deleteUser(Long id) {
+        try {
+            userRepository.deleteById(id);
+
+            return ResponseEntity.ok(new MessageResponse("Success"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
+        }
+    }
+
+    public ResponseEntity<?> getUsers() {
+        try {
+            List<User> users = userRepository.findAll();
+            return ResponseEntity.ok(new AllUserResponse(users));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }

@@ -1,5 +1,6 @@
 package kz.reserve.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -35,6 +36,7 @@ public class User {
     @Size(max = 50)
     private String phoneNumber;
 
+    @JsonIgnore
     @NotBlank
     @Size(max = 120)
     private String password;
