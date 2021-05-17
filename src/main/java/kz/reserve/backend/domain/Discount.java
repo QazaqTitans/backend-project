@@ -15,6 +15,10 @@ public class Discount {
     @ManyToOne(fetch = FetchType.EAGER)
     private Restaurant restaurant;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Meal meal;
+
     public Discount() {
     }
 
@@ -48,5 +52,13 @@ public class Discount {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public Meal getMeal() {
+        return meal;
+    }
+
+    public void setMeal(Meal meal) {
+        this.meal = meal;
     }
 }

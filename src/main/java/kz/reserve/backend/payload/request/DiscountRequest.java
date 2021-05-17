@@ -3,8 +3,9 @@ import javax.validation.constraints.NotBlank;
 public class DiscountRequest {
     @NotBlank
     private String description;
-    private Long restaurant_id;
+    private Long restaurantId;
     private int percentage;
+    private Long mealId;
 
     public String getDescription() {
         return description;
@@ -14,19 +15,27 @@ public class DiscountRequest {
         this.description = description;
     }
 
-    public Long getRestaurant_id() {
-        return restaurant_id;
-    }
-
-    public void setRestaurant_id(Long restaurant_id) {
-        this.restaurant_id = restaurant_id;
-    }
-
     public double getPercentage() {
         return percentage;
     }
 
     public void setPercentage(int percentage) {
         this.percentage = percentage;
+    }
+
+    public Long getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(Long restaurantId) {
+        this.restaurantId = restaurantId;
+    }
+
+    public Long getMealId() {
+        return mealId;
+    }
+
+    public void setMealId(Long mealId) {
+        this.mealId = mealId;
     }
 }

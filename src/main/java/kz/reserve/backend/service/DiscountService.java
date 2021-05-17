@@ -1,12 +1,14 @@
 package kz.reserve.backend.service;
 
 import kz.reserve.backend.domain.Discount;
+import kz.reserve.backend.domain.Meal;
 import kz.reserve.backend.domain.Restaurant;
 import kz.reserve.backend.domain.User;
 import kz.reserve.backend.payload.request.DiscountRequest;
 import kz.reserve.backend.payload.response.DiscountResponse;
 import kz.reserve.backend.payload.response.MessageResponse;
 import kz.reserve.backend.repository.DiscountRepository;
+import kz.reserve.backend.repository.MealRepository;
 import kz.reserve.backend.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,10 @@ public class DiscountService {
 
     @Autowired
     private DiscountRepository discountRepository;
+
+    @Autowired
+    private MealRepository mealRepository;
+
     public ResponseEntity<?> getDiscounts() {
         List<Discount> discountList = discountRepository.findAll();
         return ResponseEntity.ok(new DiscountResponse(discountList));
@@ -42,10 +48,14 @@ public class DiscountService {
         return ResponseEntity.ok(new MessageResponse("Success"));
     }
     private void discountCreator(DiscountRequest discountRequest, Discount discount) {
-        Restaurant restaurant = restaurantRepository.getOne(discountRequest.getRestaurant_id());
+        Restaurant restaurant = restaurantRepository.getOne(discountRequest.getRestaurantId());
+        Meal meal = mealRepository.getOne(discountRequest.getMealId());
+
         discount.setRestaurant(restaurant);
         discount.setDescription(discountRequest.getDescription());
         discount.setPercentage(discountRequest.getPercentage());
+        discount.setMeal(meal);
+
         discountRepository.save(discount);
     }
     public ResponseEntity<?> updateDiscount(Long discountId, DiscountRequest discountRequest) {

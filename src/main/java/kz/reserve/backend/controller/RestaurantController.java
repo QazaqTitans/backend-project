@@ -17,7 +17,6 @@ import javax.validation.constraints.Min;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/restaurant")
-@PreAuthorize("hasAuthority('superAdmin')")
 public class RestaurantController {
     @Autowired
     private RestaurantService restaurantService;
@@ -27,21 +26,25 @@ public class RestaurantController {
         return restaurantService.getRestaurants();
     }
 
+    @PreAuthorize("hasAuthority('superAdmin')")
     @PostMapping()
     public ResponseEntity<?> addCategory(@Valid @ModelAttribute RestaurantRequest restaurantRequest, @RequestPart MultipartFile multipartFile) {
         return restaurantService.addRestaurant(restaurantRequest, multipartFile);
     }
 
+    @PreAuthorize("hasAuthority('superAdmin')")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateRestaurant(@Valid @Min(1) @PathVariable Long id, @Valid @ModelAttribute RestaurantRequest restaurantRequest) {
         return restaurantService.updateRestaurant(id, restaurantRequest);
     }
 
+    @PreAuthorize("hasAuthority('superAdmin')")
     @PutMapping("/update-admin/{id}")
     public ResponseEntity<?> updateRestaurant(@Valid @Min(1) @PathVariable Long id, @Valid @ModelAttribute EmailRequest emailRequest) {
         return restaurantService.updateUserOfRestaurant(id, emailRequest);
     }
 
+    @PreAuthorize("hasAuthority('superAdmin')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteRestaurant(@Valid @Min(1) @PathVariable Long id) {
         return restaurantService.deleteRestaurant(id);
