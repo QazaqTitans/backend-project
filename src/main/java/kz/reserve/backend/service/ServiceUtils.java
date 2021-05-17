@@ -4,6 +4,7 @@ import kz.reserve.backend.configuration.UserDetailsImpl;
 import kz.reserve.backend.domain.Meal;
 import kz.reserve.backend.domain.User;
 import kz.reserve.backend.repository.UserRepository;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -72,9 +73,9 @@ public class ServiceUtils {
         if (!file.isEmpty()) {
             UUID uuid = UUID.randomUUID();
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(uploadFolder + uuid.toString());
+            Path path = Paths.get(uploadFolder + uuid.toString() + "." + FilenameUtils.getExtension(file.getOriginalFilename()));
             Files.write(path, bytes);
-            return "/image/" + uuid.toString();
+            return uuid.toString() + "." + FilenameUtils.getExtension(file.getOriginalFilename());
         }
         return null;
     }

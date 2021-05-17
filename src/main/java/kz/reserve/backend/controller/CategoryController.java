@@ -16,7 +16,6 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/category")
-@PreAuthorize("hasAuthority('superAdmin')")
 public class CategoryController {
 
     @Autowired
@@ -27,16 +26,19 @@ public class CategoryController {
         return categoryService.getCategories();
     }
 
+    @PreAuthorize("hasAuthority('superAdmin')")
     @PostMapping()
     public ResponseEntity<?> addCategory(@Valid @ModelAttribute CategoryRequest categoryRequest) {
         return categoryService.addCategory(categoryRequest);
     }
 
+    @PreAuthorize("hasAuthority('superAdmin')")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCategory(@Valid @Min(1) @PathVariable Long id, @Valid @ModelAttribute CategoryRequest categoryRequest) {
         return categoryService.updateCategory(id, categoryRequest);
     }
 
+    @PreAuthorize("hasAuthority('superAdmin')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCategory(@Valid @Min(1) @PathVariable Long id) {
         return categoryService.deleteCategory(id);
