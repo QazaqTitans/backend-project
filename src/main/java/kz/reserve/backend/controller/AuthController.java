@@ -4,6 +4,7 @@ import kz.reserve.backend.configuration.UserDetailsImpl;
 import kz.reserve.backend.domain.Role;
 import kz.reserve.backend.domain.User;
 import kz.reserve.backend.payload.request.LoginRequest;
+import kz.reserve.backend.payload.request.ResetRequest;
 import kz.reserve.backend.payload.request.SignupRequest;
 import kz.reserve.backend.payload.response.JwtResponse;
 import kz.reserve.backend.payload.response.MessageResponse;
@@ -92,5 +93,10 @@ public class AuthController {
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@Valid @ModelAttribute ResetRequest request) {
+        return userService.resetPassword(request);
     }
 }
