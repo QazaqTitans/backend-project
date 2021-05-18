@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.Set;
 
 @Entity
@@ -45,7 +46,8 @@ public class Order {
             inverseJoinColumns = @JoinColumn(name = "meal_id"))
     private Set<Meal> meals;
 
-    public Order() {}
+    public Order() {
+    }
 
     public Long getId() {
         return id;
@@ -126,4 +128,17 @@ public class Order {
     public void setMeals(Set<Meal> meals) {
         this.meals = meals;
     }
+    public double orderprice() {
+        double price = 0;
+        if (!meals.isEmpty()) {
+            for (Iterator<Meal> meal = meals.iterator(); meal.hasNext();) {
+                Meal m=meal.next();
+                price=price+m.getPrice();
+            }
+        }
+        return price;
+    }
+
+
 }
+
