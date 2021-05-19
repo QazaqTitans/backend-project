@@ -161,7 +161,9 @@ public class OrderClientService {
                 meals.add(meal);
             }
 
+
             order.setMeals(meals);
+            order.orderprice();
 
             orderRepository.save(order);
 
