@@ -131,11 +131,17 @@ public class Order {
     public double orderprice() {
         double price = 0;
         if (!meals.isEmpty()) {
-            for (Iterator<Meal> meal = meals.iterator(); meal.hasNext();) {
-                Meal m=meal.next();
-                price=price+m.getPrice();
+            for (Meal m : meals) {
+                price = price + m.getPrice();
             }
         }
+
+        if (!reservedTables.isEmpty()) {
+            for (ReservedTable reservedTable : reservedTables) {
+                price += reservedTable.getReservePrice();
+            }
+        }
+
         return price;
     }
 
