@@ -8,11 +8,11 @@ import javax.validation.constraints.NotNull;
 public class SearchRequest {
     private String filter;
 
-    @NotNull
-    private Integer minPrice;
+//    @NotNull
+    private Integer minPrice = 0;
 
-    @NotNull
-    private Integer maxPrice;
+//    @NotNull
+    private Integer maxPrice = 10000000;
 
     private Integer stars = 0;
 
