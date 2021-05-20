@@ -182,7 +182,7 @@ public class RestaurantService {
 
                 restaurantObject.setRestaurant(restaurant);
 
-                LocalDateTime nearestHour = LocalDateTime.now().plusHours(1).truncatedTo(ChronoUnit.HOURS);
+                LocalDateTime nearestHour = LocalDateTime.now().plusHours(7).truncatedTo(ChronoUnit.HOURS);
                 LocalDateTime endHour = LocalDateTime.of(LocalDate.now(), LocalTime.of(22, 1));
 
                 List<String> hours = new ArrayList<>();
