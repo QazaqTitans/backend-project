@@ -8,12 +8,18 @@ import kz.reserve.backend.service.StripeService;
 import kz.reserve.backend.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+
 
 @CrossOrigin
 @Controller
@@ -27,7 +33,6 @@ public class PaymentController {
     private OrderClientService orderClientService;
 
     @Autowired
-    private OrderRepository orderRepository;
 
 
     public PaymentController(StripeService stripeService) {
@@ -48,15 +53,15 @@ public class PaymentController {
     }
 
     @PostMapping("/api/create-charge")
-    public @ResponseBody Response createCharge(String email, String token, Long id) {
+    public @ResponseBody Response createCharge(String email, String token ) { //Long id
 
 
         if (token == null) {
             return new Response(false, "Stripe payment token is missing. please try again later.");
         }
-        Order _order = orderRepository.getOne(id);
+       //Order _order = orderRepository.getOne(id);
 
-        String chargeId = stripeService.createCharge(email, token,  _order.orderprice());// 9.99 usd
+        String chargeId = stripeService.createCharge(email, token,  509000);
 
         if (chargeId == null) {
             return new Response(false, "An error accurred while trying to charge.");
@@ -66,4 +71,6 @@ public class PaymentController {
 
         return new Response(true, "Success your charge id is " + chargeId);
     }
+
+
 }
