@@ -19,7 +19,7 @@ public class StripeService {
 
     }
 
-    public String createCharge(String email, String token, double amount) {
+    public String createCharge(String email, String token, int amount) {
 
         String chargeId = null;
 
