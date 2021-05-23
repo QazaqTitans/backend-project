@@ -148,7 +148,8 @@ public class RestaurantService {
 
             String message = String.format("Hello %s! \n" +
                     "Welcome to our site, you are now admin of \"%s\" restaurant. \n" +
-                    "Your login: %s\n", user.getName(), restaurant.getName(), user.getEmail());
+                    "Your login: %s\n" +
+                    "Your password: %s\n", user.getName(), password, restaurant.getName(), user.getEmail());
 
             serviceUtils.sendMessageToUser(user, "Admin", message);
         } catch (Exception e) {

@@ -1,5 +1,8 @@
 package kz.reserve.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,6 +14,7 @@ public class Category {
 
     private String name;
 
+    @JsonIgnoreProperties({"parentCategory"})
     @ManyToOne(fetch = FetchType.EAGER)
     private Category parentCategory;
 

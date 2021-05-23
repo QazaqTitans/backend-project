@@ -7,6 +7,7 @@ import kz.reserve.backend.payload.request.OrderRequest;
 import kz.reserve.backend.payload.request.OrderUserRequest;
 import kz.reserve.backend.payload.response.DiscountResponse;
 import kz.reserve.backend.payload.response.MessageResponse;
+import kz.reserve.backend.payload.response.OrderListResponse;
 import kz.reserve.backend.payload.response.OrderResponse;
 import kz.reserve.backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,7 +138,7 @@ public class OrderClientService {
         userRepository.save(user);
 
         String message = String.format("Hello %s! \n" +
-                "Welcome to our site.\n" +
+                "Welcome to our site. To see data about your meal please sign in.\n" +
                 "Your login: %s\n" +
                 "Your password: %s\n", user.getName(), user.getEmail(), password);
 
@@ -171,5 +172,12 @@ public class OrderClientService {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
+    }
+
+    public ResponseEntity<?> getOrders() {
+        User user = serviceUtils.getPrincipal();
+        List<Order> orderList = orderRepository.findAllByClient(user);
+
+        return ResponseEntity.ok(new OrderListResponse(orderList));
     }
 }

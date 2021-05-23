@@ -43,6 +43,12 @@ public class OrderClientController {
         return orderClientService.addMealForOrder(orderId, orderMealRequest);
     }
 
+    @PreAuthorize("hasAuthority('client')")
+    @GetMapping("/my")
+    public ResponseEntity<?> getOrders() {
+        return orderClientService.getOrders();
+    }
+
 //    @PostMapping
 //    public ResponseEntity<?> updateOrder() {
 //        return null;
