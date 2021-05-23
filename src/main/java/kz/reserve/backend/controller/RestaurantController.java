@@ -27,6 +27,11 @@ public class RestaurantController {
         return restaurantService.getRestaurants();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getRestaurant(@Min(1) @Valid @PathVariable Long id) {
+        return restaurantService.getRestaurant(id);
+    }
+
     @PreAuthorize("hasAuthority('superAdmin')")
     @PostMapping()
     public ResponseEntity<?> addCategory(@Valid @ModelAttribute RestaurantRequest restaurantRequest,

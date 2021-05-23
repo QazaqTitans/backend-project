@@ -4,10 +4,7 @@ import kz.reserve.backend.domain.*;
 import kz.reserve.backend.payload.request.EmailRequest;
 import kz.reserve.backend.payload.request.RestaurantRequest;
 import kz.reserve.backend.payload.request.SearchRequest;
-import kz.reserve.backend.payload.response.JSONArrayResponse;
-import kz.reserve.backend.payload.response.MessageResponse;
-import kz.reserve.backend.payload.response.RestaurantResponse;
-import kz.reserve.backend.payload.response.RestaurantSearchResponse;
+import kz.reserve.backend.payload.response.*;
 import kz.reserve.backend.repository.CommentRepository;
 import kz.reserve.backend.repository.RestaurantRepository;
 import kz.reserve.backend.repository.TableRepository;
@@ -210,5 +207,11 @@ public class RestaurantService {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
+    }
+
+    public ResponseEntity<?> getRestaurant(Long id) {
+        Restaurant restaurant = restaurantRepository.getOne(id);
+
+        return ResponseEntity.ok(new OneRestaurantResponse(restaurant));
     }
 }
